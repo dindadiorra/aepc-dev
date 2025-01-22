@@ -13,29 +13,26 @@
             {% csrf_token %}
             <div class="mb-3">
                 <label for="cv" class="form-label">Upload CV (PDF/Word): </label>
-                <input type="file" name="cv" id="cv" class="form-control" accept=".pdf,.doc,.docx" required>
+                <input type="file" name="cv" id="cv" class="form-control" accept=".pdf" required>
             </div>
     
             <div class="mb-3">
-                <label for="name" class="form-label" style="margin-top: 10px;">Full Name <span style="color:red;">*</span></label>
+                <label for="name" class="form-label mb-0">Full Name <span style="color:red;">*</span></label>
                 <input type="text" name="name" id="name" class="form-control" required>
     
-                <label for="email" class="form-label">Email Address: <span style="color:red;">*</span></label>
+                <label for="email" class="form-label mt-3 mb-0">Email Address: <span style="color:red;">*</span></label>
                 <input type="email" name="email" id="email" class="form-control" required>
     
-                <label for="phone_number" class="form-label">Phone Number: <span style="color:red;">*</span></label>
+                <label for="phone_number" class="form-label mt-3 mb-0">Phone Number: <span style="color:red;">*</span></label>
                 <input type="tel" name="phone_number" id="phone_number" class="form-control" required>
 
-                <label for="linkedin_url" class="form-label">LinkedIn Profile (Optional):</label>
+                <label for="linkedin_url" class="form-label mt-3 mb-0">LinkedIn Profile (Optional):</label>
                 <input type="url" name="linkedin_url" id="linkedin_url" class="form-control">
     
-                <label for="address" class="form-label">Address: <span style="color:red;">*</span></label>
+                <label for="address" class="form-label mt-3 mb-0">Address: <span style="color:red;">*</span></label>
                 <input type="text" name="address" id="address" class="form-control">
-    
-                <!-- <label for="degree" class="form-label">Degree: <span style="color:red;">*</span></label>
-                <input type="text" name="degree" id="degree" class="form-control" required> -->
 
-                <label for="degree" class="form-label">Degree: <span style="color:red;">*</span></label>
+                <label for="degree" class="form-label mt-3 mb-0">Degree: <span style="color:red;">*</span></label>
                 <select id="degree" name="degree" class="form-select" required>
                     <option value="" selected disabled>Select your degree</option>
                     <option value="Diploma">Diploma Degree</option>
@@ -56,50 +53,60 @@
                     required
                 >
     
-                <label for="major" class="form-label">Major: <span style="color:red;">*</span></label>
+                <label for="major" class="form-label mt-3 mb-0">Major: <span style="color:red;">*</span></label>
                 <input type="text" name="major" id="major" class="form-control" required>
     
-                <label for="gpa" class="form-label">GPA: <span style="color:red;">*</span></label>
+                <label for="gpa" class="form-label mt-3 mb-0">GPA: <span style="color:red;">*</span></label>
                 <input type="text" name="gpa" id="gpa" class="form-control" required>
     
-                <label for="college_name" class="form-label">College Name: <span style="color:red;">*</span></label>
+                <label for="college_name" class="form-label mt-3 mb-0">College Name: <span style="color:red;">*</span></label>
                 <input type="text" name="college_name" id="college_name" class="form-control" required>
 
-                <label for="curr_salary" class="form-label">Current Salary (Optional):</label>
+                <label for="curr_salary" class="form-label mt-3 mb-0">Current Salary (Optional):</label>
                 <input type="number" step="0.01" name="curr_salary" id="curr_salary" class="form-control">
             
-                <label for="expected_salary" class="form-label">Expected Salary (Optional):</label>
+                <label for="expected_salary" class="form-label mt-3 mb-0">Expected Salary (Optional):</label>
                 <input type="number" step="0.01" name="expected_salary" id="expected_salary" class="form-control">
             
-                <label for="skills" class="form-label">Skills <span style="color:red;">*</span></label>
+                <label for="skills" class="form-label mt-3 mb-0">Skills <span style="color:red;">*</span></label>
                 <textarea name="skills" id="skills" class="form-control" rows="3" required></textarea>
             </div>
     
             <!-- Section for Adding Experience -->
             <div id="add-experience-section">
                 <br>
-                <div class="container">
-                    <div class="row d-flex justify-content-between" style="padding-left: 0px;">
-                        <h5 class="col-auto" style="font-weight: bold; text-align: left; margin-left: 0px;">Add Work Experience</h5>
+                <div class="container p-0">
+                    <div class="row d-flex justify-content-between">
+                        <h5 class="col-auto" style="font-weight: bold; text-align: left;">Add Work Experience</h5>
                         <button type="button" id="add-experience-button" class="btn btn-success mb-3 col-auto">Add Experience</button>
                     </div>
                 </div>
                 <div id="experience-list"></div>
                 <!-- Add New Experience Form -->
                 <div class="mb-3" id="add-experience-form">
-                    <label for="company_name" class="form-label">Company Name:</label>
+                    <label for="company_name" class="form-label mb-0">Company Name:</label>
                     <input type="text" name="company_name" id="company_name" class="form-control">
 
-                    <label for="position" class="form-label">Position:</label>
+                    <label for="position" class="form-label mt-3 mb-0">Position:</label>
                     <input type="text" name="position" id="position" class="form-control">
 
-                    <label for="start_date" class="form-label">Start Date:</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control">
+                    <label for="industry" class="form-label mt-3 mb-0">Industry:</label>
+                    <input type="text" name="industry" id="industry" class="form-control">
 
-                    <label for="end_date" class="form-label">End Date:</label>
-                    <input type="date" name="end_date" id="end_date" class="form-control">
+                    <div class="container text-center p-0">
+                        <div class="row">
+                            <div class="col" style="text-align: left;">
+                                <label for="start_date" class="form-label mt-3 mb-0">Start Date:</label>
+                                <input type="month" name="start_date" id="start_date" class="form-control">
+                            </div>
+                            <div class="col" style="text-align: left;">
+                                <label for="end_date" class="form-label mt-3 mb-0">End Date:</label>
+                                <input type="month" name="end_date" id="end_date" class="form-control">
+                            </div>
+                        </div>
+                    </div>
 
-                    <label for="description" class="form-label">Description:</label>
+                    <label for="description" class="form-label mt-3 mb-0">Description:</label>
                     <textarea name="description" id="description" class="form-control" rows="4"></textarea>
                 </div>
             </div>
@@ -116,105 +123,139 @@
     let experiences = [];
 
     // Handle form submission
-document.getElementById('upload-resume-form').addEventListener('submit', function (e) {
-    e.preventDefault();
+    document.getElementById('upload-resume-form').addEventListener('submit', function (e) {
+        e.preventDefault();
 
-    // Include any experiences added through the form in the experiences array
-    const companyName = document.getElementById('company_name').value.trim();
-    const position = document.getElementById('position').value.trim();
-    const startDate = document.getElementById('start_date').value.trim();
-    const endDate = document.getElementById('end_date').value.trim();
-    const description = document.getElementById('description').value.trim();
+        // Include the last unsaved experience in the form (if present)
+        const companyName = document.getElementById('company_name').value.trim();
+        const position = document.getElementById('position').value.trim();
+        const industry = document.getElementById('industry').value.trim();
+        const startDate = document.getElementById('start_date').value.trim();
+        const startDateFormatted = `${startDate}-01`;
+        const endDate = document.getElementById('end_date').value.trim();
+        const endDateFormatted = endDate ? `${endDate}-01` : null;
+        const description = document.getElementById('description').value.trim();
 
-    // Ensure we push the last experience (if any) before submitting
-    if (companyName || position || startDate) {
-        experiences.push({ companyName, position, startDate, endDate, description });
-    }
-
-    // Now append all experiences, including those added before the submit event
-    const formData = new FormData(this);
-    formData.append("experiences", JSON.stringify(experiences)); // Add all the experiences array
-
-    // Submit the form with all experiences
-    fetch("{% url 'upload_resume' %}", {
-        method: "POST",
-        body: formData,
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            this.reset();
-            experiences = []; // Reset after submission
-            document.getElementById('experience-list').innerHTML = ''; // Clear the displayed experiences
-        } else {
-            alert(`Error: ${data.errors}`);
+        if (!startDate) {
+            alert('Start Date is required.');
+            return;
         }
+
+        if (endDate && !/^\d{4}-\d{2}$/.test(endDate)) {
+            alert('End Date must be in the format YYYY-MM.');
+            return;
+        }
+
+        if (companyName || position || industry || startDate) {
+            experiences.push({ companyName, position, industry, startDate: startDateFormatted, endDate: endDateFormatted, description });
+
+            // Clear form inputs
+            ['company_name', 'position', 'industry', 'start_date', 'end_date', 'description'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+        }
+
+        // Append all experiences to FormData
+        const formData = new FormData(this);
+        formData.append("experiences", JSON.stringify(experiences));
+
+        // Submit the form
+        fetch("{% url 'upload_resume' %}", {
+            method: "POST",
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            const errorsContainer = document.getElementById('response-message');
+            errorsContainer.innerHTML = '';
+
+            if (data.success) {
+                alert(data.message);
+                window.location.href = '/';
+            } else {
+                const errors = JSON.parse(data.errors);
+                let errorMessages = '';
+                for (let field in errors) {
+                    errorMessages += `${field}: ${errors[field][0].message}\n`;
+                }
+                alert(errorMessages);
+                // errorsContainer.innerHTML = `<div class="alert alert-danger">${errorMessages.replace(/\n/g, '<br>')}</div>`;
+            }
+        }).catch(error => console.error('Error:', error));
     });
-});
 
     // Add new experience to the list
     document.getElementById('add-experience-button').addEventListener('click', function () {
         const companyName = document.getElementById('company_name').value.trim();
         const position = document.getElementById('position').value.trim();
+        const industry = document.getElementById('industry').value.trim();
         const startDate = document.getElementById('start_date').value.trim();
+        const startDateFormatted = `${startDate}-01`;
         const endDate = document.getElementById('end_date').value.trim();
+        const endDateFormatted = endDate ? `${endDate}-01` : null;
         const description = document.getElementById('description').value.trim();
 
-        // Basic validation
-        if (!companyName || !position || !startDate) {
+        if (!startDate) {
+            alert('Start Date is required.');
+            return;
+        }
+
+        if (endDate && !/^\d{4}-\d{2}$/.test(endDate)) {
+            alert('End Date must be in the format YYYY-MM.');
+            return;
+        }
+
+        // Validate input fields
+        if (!companyName || !position || !industry || !startDate) {
             alert('Please fill in all required fields for experience.');
             return;
         }
 
-        // Add the new experience to the array
-        const newExperience = { companyName, position, startDate, endDate, description };
-        experiences.push({newExperience});
+        // Add experience to the array
+        const newExperience = { companyName, position, industry, startDate: startDateFormatted, endDate: endDateFormatted, description };
+        experiences.push(newExperience);
 
-        // Display the experience in the list
-        const experienceList = document.getElementById('experience-list');
-        const experienceItem = document.createElement('div');
-        experienceItem.innerHTML = `
-            <div class="mb-3">
-                <strong>${companyName} - ${position}</strong><br>
-                <em>${startDate} to ${endDate || 'Present'}</em><br>
-                <p>${description}</p>
-                <button type="button" class="btn btn-danger delete-experience">Delete</button>
-            </div>
-        `;
-        experienceList.appendChild(experienceItem);
+        // Render the new experience in the list
+        renderExperienceList();
 
-        experienceItem.querySelector('.delete-experience').addEventListener('click', function () {
-            const index = Array.from(experienceList.children).indexOf(experienceItem);
-            experiences.splice(index, 1);
-            experienceItem.remove();
-        });
-
-        // Clear the experience input fields
-        ['company_name', 'position', 'start_date', 'end_date', 'description'].forEach(id => {
+        // Clear input fields
+        ['company_name', 'position', 'industry', 'start_date', 'end_date', 'description'].forEach(id => {
             document.getElementById(id).value = '';
         });
     });
 
-    // // Delete experience from the list
-    // function deleteExperience(index) {
-    //     experiences.splice(index, 1);  // Remove the experience at the specified index
-    //     document.getElementById('experience-list').innerHTML = '';  // Clear the list
-    //     experiences.forEach((exp, idx) => {
-    //         const experienceList = document.getElementById('experience-list');
-    //         const experienceItem = document.createElement('div');
-    //         experienceItem.innerHTML = `
-    //             <div class="mb-3">
-    //                 <strong>${exp.companyName} - ${exp.position}</strong><br>
-    //                 <em>${exp.startDate} to ${exp.endDate || 'Present'}</em><br>
-    //                 <p>${exp.description}</p>
-    //                 <button type="button" class="btn btn-danger btn-sm" onclick="deleteExperience(${idx})">Delete</button>
-    //             </div>
-    //         `;
-    //         experienceList.appendChild(experienceItem);
-    //     });
-    // }
+    // Render all experiences to the DOM
+    function renderExperienceList() {
+        const experienceList = document.getElementById('experience-list');
+        experienceList.innerHTML = ''; // Clear the list
 
+        experiences.forEach((experience, index) => {
+            const experienceItem = document.createElement('div');
+            experienceItem.classList.add('mb-3');
+            experienceItem.innerHTML = `
+                <strong>${experience.companyName} - ${experience.position}</strong><br>
+                <p class="m-0 p-0">${experience.position}</p>
+                <em>${experience.startDate} to ${experience.endDate || 'Present'}</em><br>
+                <p>${experience.description}</p>
+                <button type="button" class="btn btn-danger delete-experience" data-index="${index}">Delete</button>
+            `;
+
+            experienceList.appendChild(experienceItem);
+
+            // Add delete event listener
+            experienceItem.querySelector('.delete-experience').addEventListener('click', function () {
+                deleteExperience(index);
+            });
+        });
+    }
+
+    // Delete an experience by index
+    function deleteExperience(index) {
+        experiences.splice(index, 1); // Remove the experience from the array
+        renderExperienceList(); // Re-render the experience list
+    }
+
+    // Handle degree selection (show/hide "Other" input)
     document.getElementById('degree').addEventListener('change', function () {
         const otherDegreeInput = document.getElementById('other-degree');
         if (this.value === 'Other') {

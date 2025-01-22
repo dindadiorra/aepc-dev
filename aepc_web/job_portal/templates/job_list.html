@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Job Listings</h2>
+    <!-- Search, Filter, Sort -->
+    <div class="d-flex justify-content-between align-items-center sticky-top bg-light p-3">
+        <input type="text" id="search-bar" class="form-control w-50" placeholder="Search for jobs...">
+        <select id="filter-industry" class="form-select w-25">
+            <option value="">All Industries</option>
+            <!-- Dynamic options if needed -->
+        </select>
+        <select id="sort-options" class="form-select w-25">
+            <option value="-created_at">Newest First</option>
+            <option value="created_at">Oldest First</option>
+            <option value="title">Alphabetical</option>
+        </select>
+    </div>
+
+    <!-- Job Cards -->
+    <div id="job-list" class="row row-cols-1 row-cols-md-3 g-4"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="text-center my-4 d-none">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Load More Button -->
+    <div class="text-center">
+        <button id="load-more" class="btn btn-primary">Load More</button>
+    </div>
+</div>
+
+<script>
+    let currentPage = 1;
+
+    // Function to load job data
+    function loadJobs() {
+        const spinner = document.getElementById('loading-spinner');
+        spinner.classList.remove('d-none');
+
+        const search = document.getElementById('search-bar').value;
+        const filter = document.getElementById('filter-industry').value;
+        const sort = document.getElementById('sort-options').value;
+
+        fetch(`/jobs/data/?page=${currentPage}&search=${search}&filter=${filter}&sort=${sort}`)
+            .then(response => response.json())
+            .then(data => {
+                spinner.classList.add('d-none');
+                renderJobs(data.jobs);
+                if (!data.has_next) {
+                    document.getElementById('load-more').classList.add('d-none');
+                }
+            })
+            .catch(error => {
+                console.error('Error loading jobs:', error);
+                spinner.classList.add('d-none');
+            });
+    }
+
+    // Function to render jobs
+    function renderJobs(jobs) {
+        const jobList = document.getElementById('job-list');
+        jobs.forEach(job => {
+            const card = `
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="/static/default-job.png" class="img-fluid rounded-start" alt="Job Poster">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">${job.title}</h5>
+                                    <p class="card-text">
+                                        Location: ${job.location}<br>
+                                        Seniority: ${job.seniority_level}<br>
+                                        Industry: ${job.industry} / ${job.sub_industry}<br>
+                                        Posted: ${job.created_at}
+                                    </p>
+                                    <a href="/jobs/${job.id}/" class="btn btn-primary">View More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            jobList.insertAdjacentHTML('beforeend', card);
+        });
+    }
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', () => {
+        loadJobs();
+
+        // Load more button
+        document.getElementById('load-more').addEventListener('click', () => {
+            currentPage += 1;
+            loadJobs();
+        });
+
+        // Search, Filter, Sort functionality
+        ['search-bar', 'filter-industry', 'sort-options'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                document.getElementById('job-list').innerHTML = '';
+                currentPage = 1;
+                document.getElementById('load-more').classList.remove('d-none');
+                loadJobs();
+            });
+        });
+    });
+</script>
+{% endblock %}

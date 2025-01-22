@@ -2,6 +2,8 @@ from django import forms
 from .models import Candidate, Experience
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
+from django.core.validators import validate_email
+import os
 
 class CandidateForm(forms.ModelForm):
     class Meta:
@@ -18,40 +20,57 @@ class CandidateForm(forms.ModelForm):
         labels = {
             'cv': 'Upload CV (PDF/Word)',
         }
-    
-    def clean_curr_salary(self):
-        curr_salary = self.cleaned_data.get('curr_salary')
-        if curr_salary is not None and curr_salary < 0:
-            raise forms.ValidationError("Current salary cannot be negative.")
-        return curr_salary
+        
+    def clean_cv(self):
+        cv = self.cleaned_data.get('cv')
+        if not cv:
+            raise forms.ValidationError("CV is required.")
+        if not cv.name.endswith('.pdf'):
+            raise forms.ValidationError("CV must be a PDF file.")
+        if cv.size > 10 * 1024 * 1024:  # 10MB limit
+            raise forms.ValidationError("CV file size must be under 10MB.")
+        return cv
 
-    def clean_expected_salary(self):
-        expected_salary = self.cleaned_data.get('expected_salary')
-        if expected_salary is not None and expected_salary < 0:
-            raise forms.ValidationError("Expected salary cannot be negative.")
-        return expected_salary
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not email:
+            raise forms.ValidationError("Email is required.")
+        try:
+            validate_email(email)
+        except ValidationError:
+            raise forms.ValidationError("Enter a valid email address.")
+        return email
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if not phone_number:
+            raise forms.ValidationError("Phone number is required.")
+        if not phone_number.isdigit():
+            raise forms.ValidationError("Phone number must contain only digits.")
+        return phone_number
 
     def clean_gpa(self):
         gpa = self.cleaned_data.get('gpa')
-        if gpa is not None and gpa < 0:
-            raise forms.ValidationError("GPA cannot be negative.")
+        if not gpa:
+            raise forms.ValidationError("GPA is required.")
+        try:
+            gpa = float(gpa)
+            if gpa < 0 or gpa > 4.00:
+                raise forms.ValidationError("GPA must be between 0.00 and 4.00.")
+        except ValueError:
+            raise forms.ValidationError("GPA must be a number in the format 4.00.")
         return gpa
 
-    def clean_linkedin_url(self):
-        linkedin_url = self.cleaned_data.get('linkedin_url')
-        if linkedin_url:
-            validator = URLValidator()
-            try:
-                if not linkedin_url.startswith(('http://', 'https://')):
-                    linkedin_url = f"http://{linkedin_url}"
-                validator(linkedin_url)
-            except ValidationError:
-                raise forms.ValidationError("Invalid LinkedIn URL. Please ensure the format is correct.")
-        return linkedin_url
-
-
+    def clean(self):
+        cleaned_data = super().clean()
+        # Check for required fields
+        required_fields = ['name', 'address', 'degree', 'major', 'college_name', 'skills']
+        for field in required_fields:
+            if not cleaned_data.get(field):
+                self.add_error(field, f"{field.replace('_', ' ').capitalize()} is required.")
+        return cleaned_data
 
 class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience
-        fields = ['company_name', 'position', 'start_date', 'end_date', 'description']
+        fields = ['company_name', 'position', 'industry', 'start_date', 'end_date', 'description']
