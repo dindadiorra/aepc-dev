@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Upload Resume{% endblock %}
+{% block title %}Apply - Aurora Executive Placement Consultant{% endblock %}
 
 {% block content %}
 <section>
@@ -42,7 +42,7 @@
                     <option value="PhD">PhD (Doctorate)</option>
                     <option value="Other">Other (please specify)</option>
                 </select>
-                <!-- Input untuk degree tambahan -->
+                <!-- Input untuk others -->
                 <input
                     type="text"
                     id="other-degree"
@@ -72,7 +72,7 @@
                 <textarea name="skills" id="skills" class="form-control" rows="3" required></textarea>
             </div>
     
-            <!-- Section for Adding Experience -->
+            <!-- Add Experience -->
             <div id="add-experience-section">
                 <br>
                 <div class="container p-0">
@@ -104,6 +104,12 @@
                                 <input type="month" name="end_date" id="end_date" class="form-control">
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col" style="text-align: left;">
+                                <input type="checkbox" name="present" id="present" class="form-check-input align-bottom mb-1">
+                                <label for="present" class="form-label mt-3 mb-0">Currently Working (Present)</label>
+                            </div>
+                        </div>
                     </div>
 
                     <label for="description" class="form-label mt-3 mb-0">Description:</label>
@@ -119,7 +125,6 @@
 </section>
 
 <script>
-    // Array to hold experience data
     let experiences = [];
 
     // Handle form submission
@@ -135,16 +140,6 @@
         const endDate = document.getElementById('end_date').value.trim();
         const endDateFormatted = endDate ? `${endDate}-01` : null;
         const description = document.getElementById('description').value.trim();
-
-        if (!startDate) {
-            alert('Start Date is required.');
-            return;
-        }
-
-        if (endDate && !/^\d{4}-\d{2}$/.test(endDate)) {
-            alert('End Date must be in the format YYYY-MM.');
-            return;
-        }
 
         if (companyName || position || industry || startDate) {
             experiences.push({ companyName, position, industry, startDate: startDateFormatted, endDate: endDateFormatted, description });
@@ -179,7 +174,6 @@
                     errorMessages += `${field}: ${errors[field][0].message}\n`;
                 }
                 alert(errorMessages);
-                // errorsContainer.innerHTML = `<div class="alert alert-danger">${errorMessages.replace(/\n/g, '<br>')}</div>`;
             }
         }).catch(error => console.error('Error:', error));
     });
@@ -194,16 +188,6 @@
         const endDate = document.getElementById('end_date').value.trim();
         const endDateFormatted = endDate ? `${endDate}-01` : null;
         const description = document.getElementById('description').value.trim();
-
-        if (!startDate) {
-            alert('Start Date is required.');
-            return;
-        }
-
-        if (endDate && !/^\d{4}-\d{2}$/.test(endDate)) {
-            alert('End Date must be in the format YYYY-MM.');
-            return;
-        }
 
         // Validate input fields
         if (!companyName || !position || !industry || !startDate) {
@@ -224,10 +208,9 @@
         });
     });
 
-    // Render all experiences to the DOM
     function renderExperienceList() {
         const experienceList = document.getElementById('experience-list');
-        experienceList.innerHTML = ''; // Clear the list
+        experienceList.innerHTML = '';
 
         experiences.forEach((experience, index) => {
             const experienceItem = document.createElement('div');
@@ -242,7 +225,6 @@
 
             experienceList.appendChild(experienceItem);
 
-            // Add delete event listener
             experienceItem.querySelector('.delete-experience').addEventListener('click', function () {
                 deleteExperience(index);
             });
@@ -251,20 +233,19 @@
 
     // Delete an experience by index
     function deleteExperience(index) {
-        experiences.splice(index, 1); // Remove the experience from the array
-        renderExperienceList(); // Re-render the experience list
+        experiences.splice(index, 1);
+        renderExperienceList();
     }
 
-    // Handle degree selection (show/hide "Other" input)
     document.getElementById('degree').addEventListener('change', function () {
         const otherDegreeInput = document.getElementById('other-degree');
         if (this.value === 'Other') {
-            otherDegreeInput.style.display = 'block'; // Show input box
-            otherDegreeInput.required = true; // Make it required
+            otherDegreeInput.style.display = 'block';
+            otherDegreeInput.required = true;
         } else {
-            otherDegreeInput.style.display = 'none'; // Hide input box
-            otherDegreeInput.value = ''; // Clear input value
-            otherDegreeInput.required = false; // Remove required attribute
+            otherDegreeInput.style.display = 'none';
+            otherDegreeInput.value = '';
+            otherDegreeInput.required = false;
         }
     });
 </script>

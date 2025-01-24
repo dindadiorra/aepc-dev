@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4 fw-bold">{{ job.title }}</h2>
+
+    <!-- Job Details Section -->
+    <div class="row">
+        <!-- Gambar Job Poster -->
+        <div class="col-md-5 mb-4">
+            {% if job.job_poster %}
+                <img src="{{ job.job_poster.url }}" class="img-fluid rounded job-poster" alt="Job Poster">
+            {% else %}
+                <img src="/static/default-job.png" class="img-fluid rounded job-poster" alt="No Job Poster">
+            {% endif %}
+        </div>
+
+        <!-- Job Information -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <p><strong>Location:</strong> {{ job.location }}</p>
+            </div>
+            <div class="mb-3">
+                <p><strong>Seniority Level:</strong> {{ job.seniority_level }}</p>
+            </div>
+            <div class="mb-3">
+                <p><strong>Industry:</strong> {{ job.industry }}</p>
+            </div>
+            <div class="mb-3">
+                <p><strong>Sub-industry:</strong> {{ job.sub_industry }}</p>
+            </div>
+
+            <div class="mb-3">
+                <strong>Requirements:</strong>
+                <ul>
+                    {% for requirement in job.requirement_details.splitlines %}
+                        {{ requirement }}</br>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="mb-3">
+                <strong>Send Your Resume To:</strong></br>
+                <i class="bi bi-envelope-fill"></i> <a href="mailto:{{ job.recruiter_email }}">{{ job.recruiter_email }}</a></br>
+                <i class="bi bi-phone-fill"></i> <a href="tel:{{ job.recruiter_phone }}">{{ job.recruiter_phone }}</a>
+            </div>
+
+            <!-- Apply Button -->
+            <button id="apply-job" class="btn btn-primary mt-3">Apply</button>
+        </div>
+    </div>
+
+<style>
+    .job-poster {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .mb-3 p, .mb-3 ul {
+        font-size: 1.1rem;
+    }
+
+    .mb-3 ul {
+        padding-left: 20px;
+    }
+
+    .mb-3 i {
+        margin-right: 8px;
+    }
+</style>
+
+{% endblock %}

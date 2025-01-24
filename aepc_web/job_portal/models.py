@@ -30,6 +30,8 @@ class Experience(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     description = models.TextField()
+    # year = models.IntegerField(null=True, blank=True)
+    # month = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.position} at {self.company_name}"
@@ -44,12 +46,14 @@ class Job(models.Model):
     requirement_details = models.TextField()
     recruiter_email = models.CharField(max_length=255)
     recruiter_phone = models.CharField(max_length=15)
+    job_poster = models.ImageField(upload_to='job_poster/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
-    
+        return self.title
+
+
 '''
 1. Fitur Job List:
 - Purpose: menampilkan daftar lowongan kerja

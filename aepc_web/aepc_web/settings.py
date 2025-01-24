@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -132,4 +131,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Set base folder for media files
 MEDIA_URL = '/media/'  # URL untuk mengakses file media di browser
-MEDIA_ROOT = os.path.join(BASE_DIR, '') # Folder untuk menyimpan file di server
+# MEDIA_ROOT = os.path.join(BASE_DIR, '') # Folder untuk menyimpan file di server
+MEDIA_ROOT = BASE_DIR / 'media'

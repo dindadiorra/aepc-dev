@@ -39,7 +39,7 @@ main {
 /* Footer */
 footer {
     background: #563768;  /* Same as the header color */
-    color: #fff;
+    color: #ffffff;
     text-align: center;
     padding: 20px 0;
     margin-top: 20px;
@@ -52,3 +52,13 @@ footer {
         margin-bottom: 10px;
     }
 }
+
+footer a {
+    text-decoration: none;
+    color: inherit;
+}
+
+footer a:hover {
+    color: #d1b5e5; /* Adjust hover color if needed */
+}
+

@@ -14,14 +14,13 @@ def upload_cv(request):
         if candidate_form.is_valid():
             candidate = candidate_form.save(commit=False)
             
-            # Ambil nilai degree dari dropdown atau input "other_degree"
+            # Choose degree from dropdown or input other degrree
             degree = request.POST.get('degree')
             other_degree = request.POST.get('other_degree')
             candidate.degree = other_degree if degree == "Other" else degree
 
             candidate.save()
 
-            # Menangani pengalaman kerja yang dikirim dalam request
             try:
                 experiences_data = json.loads(request.POST.get('experiences', '[]'))
                 for experience_data in experiences_data:
@@ -44,7 +43,6 @@ def upload_cv(request):
             except Exception as e:
                 return JsonResponse({'success': False, 'errors': str(e)}, status=400)
         else:
-            # Send form errors to front-end
             errors = candidate_form.errors.as_json()
             return JsonResponse({'success': False, 'errors': errors}, status=400)
     else:
@@ -52,8 +50,8 @@ def upload_cv(request):
 
     return render(request, 'upload_resume.html', {'candidate_form': candidate_form})
 
-# Tambah Experience via AJAX
-def add_experience_ajax(request, candidate_id):
+# Add experience
+def add_experience(request, candidate_id):
     candidate = get_object_or_404(Candidate, id=candidate_id)
 
     if request.method == 'POST':
@@ -69,7 +67,8 @@ def add_experience_ajax(request, candidate_id):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
 
 def job_list(request):
-    return render(request, 'job_list.html')
+    jobs = Job.objects.all()
+    return render(request, 'job_list.html', {'jobs': jobs})
 
 def job_list_data(request):
     search_query = request.GET.get('search', '')
@@ -101,6 +100,7 @@ def job_list_data(request):
             "industry": job.industry,
             "sub_industry": job.sub_industry,
             "created_at": job.created_at.strftime('%Y-%m-%d'),
+            "job_poster": job.job_poster.url if job.job_poster else '/static/default-job.png',
         }
         for job in jobs_page
     ]
@@ -108,4 +108,11 @@ def job_list_data(request):
     return JsonResponse({
         "jobs": job_data,
         "has_next": jobs_page.has_next(),
+    })
+
+def job_detail(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
+
+    return render(request, 'job_details.html', {
+        'job': job
     })
