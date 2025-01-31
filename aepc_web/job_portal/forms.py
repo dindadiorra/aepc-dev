@@ -27,7 +27,7 @@ class CandidateForm(forms.ModelForm):
             raise forms.ValidationError("CV is required.")
         if not cv.name.endswith('.pdf'):
             raise forms.ValidationError("CV must be a PDF file.")
-        if cv.size > 10 * 1024 * 1024:  # 10MB limit
+        if cv.size > 10 * 1024 * 1024:
             raise forms.ValidationError("CV file size must be under 10MB.")
         return cv
 
@@ -63,7 +63,6 @@ class CandidateForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        # Check for required fields
         required_fields = ['name', 'address', 'degree', 'major', 'college_name', 'skills']
         for field in required_fields:
             if not cleaned_data.get(field):

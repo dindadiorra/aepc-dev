@@ -4,9 +4,7 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4 fw-bold">{{ job.title }}</h2>
 
-    <!-- Job Details Section -->
     <div class="row">
-        <!-- Gambar Job Poster -->
         <div class="col-md-5 mb-4">
             {% if job.job_poster %}
                 <img src="{{ job.job_poster.url }}" class="img-fluid rounded job-poster" alt="Job Poster">
@@ -15,22 +13,24 @@
             {% endif %}
         </div>
 
-        <!-- Job Information -->
         <div class="col-md-6">
             <div class="mb-3">
+                <i class="bi bi-calendar-week" style="margin-right:4px;"></i> {{ job.created_at|date:"F j, Y" }}
+            </div>
+            <div class="mb-2">
                 <p><strong>Location:</strong> {{ job.location }}</p>
             </div>
-            <div class="mb-3">
+            <div class="mb-2">
                 <p><strong>Seniority Level:</strong> {{ job.seniority_level }}</p>
             </div>
-            <div class="mb-3">
+            <div class="mb-2">
                 <p><strong>Industry:</strong> {{ job.industry }}</p>
             </div>
-            <div class="mb-3">
+            <div class="mb-2">
                 <p><strong>Sub-industry:</strong> {{ job.sub_industry }}</p>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-2">
                 <strong>Requirements:</strong>
                 <ul>
                     {% for requirement in job.requirement_details.splitlines %}
@@ -39,14 +39,17 @@
                 </ul>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-2">
                 <strong>Send Your Resume To:</strong></br>
-                <i class="bi bi-envelope-fill"></i> <a href="mailto:{{ job.recruiter_email }}">{{ job.recruiter_email }}</a></br>
-                <i class="bi bi-phone-fill"></i> <a href="tel:{{ job.recruiter_phone }}">{{ job.recruiter_phone }}</a>
+                <i class="bi bi-envelope-fill"></i> <a href="mailto:{{ job.recruiter_email }}" style="color: #563768;">{{ job.recruiter_email }}</a></br>
+                <i class="bi bi-phone-fill"></i> <a href="tel:{{ job.recruiter_phone }}" style="color: #563768;">{{ job.recruiter_phone }}</a>
             </div>
 
-            <!-- Apply Button -->
-            <button id="apply-job" class="btn btn-primary mt-3">Apply</button>
+            <a href="{% url 'apply' job.id %}">
+                <button id="apply-job" class="btn btn-primary mt-3" style="background: #563768;">
+                    Apply
+                </button>
+            </a>
         </div>
     </div>
 

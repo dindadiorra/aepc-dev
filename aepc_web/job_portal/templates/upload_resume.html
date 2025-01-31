@@ -8,9 +8,35 @@
         <h2 style="font-weight: bold;">Candidate Form</h2>
         <p>Upload your resume and fill out the form.</p>
     </div>
+
+    {% if job %}
+    <div class="card mb-3" style="max-height: 150px; max-width: 774px; margin-left:260px;">
+        <div class="row g-0">
+            <div class="col-md-3">
+                <img src="{{ job.job_poster.url }}" class="card-img-top" style="max-height: 150px; max-width: 150px;" alt="Job Poster">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title" style="font-weight:bold;"> {{ job.title }}</h5>
+                    <p class="card-text text-muted">
+                        <i class="bi bi-geo-alt-fill"></i> {{ job.location }}</br>
+                        <i class="bi bi-circle-fill" style="font-size:10px; margin-left:2px; margin-right:2px;"></i> {{ job.seniority_level }}</br>
+                        <i class="bi bi-suitcase-lg-fill"></i> {{ job.industry }} / {{ job.sub_industry }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
     <div class="container-sm" style="max-width:800px;">
-        <form id="upload-resume-form" method="POST" enctype="multipart/form-data" class="mb-4">
+        <form id="upload-resume-form" method="POST" enctype="multipart/form-data" class="mb-4" action="{% if job %}{% url 'apply' job.id %}{% else %}{% url 'upload_resume' %}{% endif %}">
             {% csrf_token %}
+
+            {% if job %}
+            <input type="hidden" name="job_id" value="{{ job.id }}">
+            {% endif %}
+
             <div class="mb-3">
                 <label for="cv" class="form-label">Upload CV (PDF/Word): </label>
                 <input type="file" name="cv" id="cv" class="form-control" accept=".pdf" required>
@@ -42,7 +68,7 @@
                     <option value="PhD">PhD (Doctorate)</option>
                     <option value="Other">Other (please specify)</option>
                 </select>
-                <!-- Input untuk others -->
+
                 <input
                     type="text"
                     id="other-degree"
@@ -72,7 +98,6 @@
                 <textarea name="skills" id="skills" class="form-control" rows="3" required></textarea>
             </div>
     
-            <!-- Add Experience -->
             <div id="add-experience-section">
                 <br>
                 <div class="container p-0">
@@ -82,7 +107,7 @@
                     </div>
                 </div>
                 <div id="experience-list"></div>
-                <!-- Add New Experience Form -->
+
                 <div class="mb-3" id="add-experience-form">
                     <label for="company_name" class="form-label mb-0">Company Name:</label>
                     <input type="text" name="company_name" id="company_name" class="form-control">
@@ -127,11 +152,9 @@
 <script>
     let experiences = [];
 
-    // Handle form submission
     document.getElementById('upload-resume-form').addEventListener('submit', function (e) {
         e.preventDefault();
 
-        // Include the last unsaved experience in the form (if present)
         const companyName = document.getElementById('company_name').value.trim();
         const position = document.getElementById('position').value.trim();
         const industry = document.getElementById('industry').value.trim();
@@ -144,18 +167,15 @@
         if (companyName || position || industry || startDate) {
             experiences.push({ companyName, position, industry, startDate: startDateFormatted, endDate: endDateFormatted, description });
 
-            // Clear form inputs
             ['company_name', 'position', 'industry', 'start_date', 'end_date', 'description'].forEach(id => {
                 document.getElementById(id).value = '';
             });
         }
 
-        // Append all experiences to FormData
         const formData = new FormData(this);
         formData.append("experiences", JSON.stringify(experiences));
 
-        // Submit the form
-        fetch("{% url 'upload_resume' %}", {
+        fetch(this.action, {
             method: "POST",
             body: formData,
         })
@@ -174,11 +194,11 @@
                     errorMessages += `${field}: ${errors[field][0].message}\n`;
                 }
                 alert(errorMessages);
+                renderExperienceList();
             }
         }).catch(error => console.error('Error:', error));
     });
 
-    // Add new experience to the list
     document.getElementById('add-experience-button').addEventListener('click', function () {
         const companyName = document.getElementById('company_name').value.trim();
         const position = document.getElementById('position').value.trim();
@@ -189,20 +209,16 @@
         const endDateFormatted = endDate ? `${endDate}-01` : null;
         const description = document.getElementById('description').value.trim();
 
-        // Validate input fields
         if (!companyName || !position || !industry || !startDate) {
             alert('Please fill in all required fields for experience.');
             return;
         }
 
-        // Add experience to the array
         const newExperience = { companyName, position, industry, startDate: startDateFormatted, endDate: endDateFormatted, description };
         experiences.push(newExperience);
 
-        // Render the new experience in the list
         renderExperienceList();
 
-        // Clear input fields
         ['company_name', 'position', 'industry', 'start_date', 'end_date', 'description'].forEach(id => {
             document.getElementById(id).value = '';
         });
@@ -231,7 +247,6 @@
         });
     }
 
-    // Delete an experience by index
     function deleteExperience(index) {
         experiences.splice(index, 1);
         renderExperienceList();

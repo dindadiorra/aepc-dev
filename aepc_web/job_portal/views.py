@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from .models import Candidate, Experience, Job
+from .models import Candidate, Experience, Job, JobApplication
 from .forms import CandidateForm, ExperienceForm
 import json
 from django.core.paginator import Paginator
@@ -8,20 +8,23 @@ from django.core.paginator import Paginator
 def home(request):
     return render(request, 'home.html')
 
-def upload_cv(request):
+def apply_or_upload_resume(request, job_id=None):
+    job = get_object_or_404(Job, id=job_id) if job_id else None
     if request.method == 'POST':
         candidate_form = CandidateForm(request.POST, request.FILES)
         if candidate_form.is_valid():
             candidate = candidate_form.save(commit=False)
             
-            # Choose degree from dropdown or input other degrree
             degree = request.POST.get('degree')
             other_degree = request.POST.get('other_degree')
             candidate.degree = other_degree if degree == "Other" else degree
 
             candidate.save()
 
-            try:
+            if job:
+                JobApplication.objects.create(candidate=candidate, job=job)
+
+            try:              
                 experiences_data = json.loads(request.POST.get('experiences', '[]'))
                 for experience_data in experiences_data:
                     if experience_data.get('companyName') and experience_data.get('position') and experience_data.get('startDate'):
@@ -37,7 +40,7 @@ def upload_cv(request):
 
                 return JsonResponse({
                     'success': True,
-                    'message': 'Resume and profile saved successfully!',
+                    'message': 'Job Application saved successfully!' if job else 'Resume uploaded successfully!',
                     'candidate_id': candidate.id
                 })
             except Exception as e:
@@ -48,9 +51,8 @@ def upload_cv(request):
     else:
         candidate_form = CandidateForm()
 
-    return render(request, 'upload_resume.html', {'candidate_form': candidate_form})
+    return render(request, 'upload_resume.html', {'candidate_form': candidate_form, 'job': job})
 
-# Add experience
 def add_experience(request, candidate_id):
     candidate = get_object_or_404(Candidate, id=candidate_id)
 

@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
+def home(request):
+    return render(request, 'admin_home.html')
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']

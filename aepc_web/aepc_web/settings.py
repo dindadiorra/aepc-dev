@@ -77,9 +77,9 @@ WSGI_APPLICATION = 'aepc_web.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'USER': 'aepc',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'job_portal',
+        'USER': 'postgres',
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '5432',
